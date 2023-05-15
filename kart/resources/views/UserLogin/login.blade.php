@@ -7,6 +7,13 @@
     <title>Login</title>
     <style>
         .login-header{
+            position: fixed;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            background: #fff;
             align-items: center;
             font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
             width: 50%;
@@ -87,12 +94,20 @@
             background-color: transparent;
             border: none;
             color:blue;
-            margin-right:50px;
+            margin-right:25px;
             font-size:18px;
             margin-top:-3px;
         }
         .login-header3 p{
-            margin-left:35px;
+            margin-left:20px;
+        }
+        .error-message {
+        color: red;
+        font-size: 0.8rem;
+        margin-left:11%;
+        }
+        form input.error {
+        border-color: red;
         }
     </style> 
 </head>
@@ -108,8 +123,10 @@
             <form action="/existingUser" method="POST"> 
                 @csrf
                 <h3>Enter Your Email Address</h3>                
-                <input type="email" id="name" name="email" placeholder="Your Email">
-                <input type="Password" id="Password" name="password" placeholder="Your password">
+                <input type="email" id="loginemail" placeholder="Your Email"   >
+                <span class="error-message"></span>
+                <input type="password" id="loginPassword" name="password" placeholder="Your password"  >
+                <span class="error-message"></span>
                 <div class="btn"> 
                     <button>Login</button>
                 </div>
@@ -121,4 +138,36 @@
         </div>
     </div>
 </body>
+<script>
+    var loginemail = document.getElementById('loginemail');
+    loginemail.addEventListener('blur',()=>{
+        var emailvalue = inputEmail.value.trim();
+
+    if(emailvalue===""){
+        loginemail.classList.add('error');
+        loginemail.nextElementSibling.textContent ='Email is required';
+    }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailvalue)){
+        loginemail.classList.add('error');
+        loginemail.nextElementSibling.textContent = "Email is invalid";
+        }else{
+            loginemail.classList.remove('error');
+            loginemail.nextElementSibling.textContent= "";
+        }
+    });
+    var loginPassword = document.getElementById('loginPassword');
+    loginPassword.addEventListener('blur',()=>{
+        var passwordvalue = inputPassword.value.trim();
+
+        if(passwordvalue===""){
+            loginPassword.classList.add('error');
+            loginPassword.nextElementSibling.textContent ="Password is required" 
+        }else if(passwordvalue.length < 8){
+            loginPassword.classList.add('error');
+            loginPassword.nextElementSibling.textContent="Password must be at least 8 characters";
+        }else{
+            loginPassword.classList.remove('error');
+            loginPassword.nextElementSibling.textContent ='';
+        }
+    });
+</script>
 </html>

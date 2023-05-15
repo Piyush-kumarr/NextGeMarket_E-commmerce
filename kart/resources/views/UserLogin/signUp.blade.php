@@ -7,6 +7,13 @@
     <title>Login</title>
     <style>
         .signHeader{
+            position: fixed;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            background: #fff;
             align-items: center;
             font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
             width: 50%;
@@ -87,6 +94,14 @@
             font-size:18px;
             margin-top:-3px;
         }
+        .error-message {
+        color: red;
+        font-size: 0.8rem;
+        margin-left:11%;
+        }
+        form input.error {
+        border-color: red;
+        }
     </style> 
 </head>
 <body>
@@ -97,15 +112,21 @@
             <button  class="signCloseTab" id="signCloseTab">╳</button>
         </div>
     <hr>
-
         <div class="signSubHeader">
-            <form action="/NewUser" method="POST"> 
+            <form action="/userRegister" method="POST"> 
                 @csrf
-                <h3>Enter Your Phone No.</h3>
-                <input type="email" id="name" name="phone" placeholder="Your Phone">
-                <!-- <input type="Password" id="Password" name="password" placeholder="Your password"> -->
+                <h3>Sign Up Here</h3>
+                <input type="name" id="name" name="name" placeholder="Your Name"  >
+                <span class="error-message"></span>
+                <input type="email" id="signEmail" name="email" placeholder="Your Email"  >
+                <span class="error-message"></span>
+                @error('email')
+                    <div class="error-message">{{ $message }}</div>
+                @enderror
+                <input type="password" id="password" name="password" placeholder="Create Password"  >
+                <span class = "error-message"></span>
                 <div class="signBtn"> 
-                    <button>Continue</button>
+                    <button>Sign Up</button>
                 </div>
         </div>
             </form>
@@ -126,5 +147,53 @@
         document.getElementById('signUpPage').style.display = 'none';
         document.getElementById('loginPage').style.display = 'block';
     })
+
+    var inputName = document.getElementById("name");
+    console.log(inputName)
+    inputName.addEventListener('blur',()=>{
+        var nameValue = inputName.value.trim();
+
+        if(nameValue===''){
+            inputName.classList.add('error');
+            inputName.nextElementSibling.textContent= 'Name is required';
+        } else if(!/^[a-zA-Z ]+$/.test(nameValue)){
+            inputName.classList.add('error');
+            inputName.nextElementSibling.textContent= 'Name should be contains letter and spaces';
+        }else{
+            inputName.classList.remove('error');
+            inputName.nextElementSibling.textContent = '';
+        }
+    });
+    var inputEmail = document.getElementById('signEmail');
+    inputEmail.addEventListener('blur',()=>{
+        var emailValue = inputEmail.value.trim();
+
+        if(emailValue===""){
+            inputEmail.classList.add('error');
+            inputEmail.nextElementSibling.textContent ='Email is required';
+        }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)){
+            inputEmail.classList.add('error');
+            inputEmail.nextElementSibling.textContent = "Email is invalid";
+        }else{
+            inputEmail.classList.remove('error');
+            inputEmail.nextElementSibling.textContent= "";
+        }
+    });
+    var inputPassword = document.getElementById('password');
+    inputPassword.addEventListener('blur',()=>{
+        var passwordValue = inputPassword.value.trim();
+
+        if(passwordValue===""){
+            inputPassword.classList.add('error');
+            inputPassword.nextElementSibling.textContent ="Password is required" 
+        }else if(passwordValue.length < 8){
+            inputPassword.classList.add('error');
+            inputPassword.nextElementSibling.textContent="Password must be at least 8 characters";
+        }else{
+            inputPassword.classList.remove('error');
+            inputPassword.nextElementSibling.textContent ='';
+        }
+    });
+    
 </script>
 </html>
